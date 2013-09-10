@@ -10,7 +10,7 @@
 <script>
 
     function fun1(){
-        return new YPro(function(comp,err,prog){
+        return new YPro(function(comp,err){
             setTimeout(function(){
                 comp("fun1 done");
             },3000);
@@ -18,7 +18,7 @@
     }
 
     function fun2(){
-        return new YPro(function(comp,err,prog){
+        return new YPro(function(comp,err){
             setTimeout(function(){
                 comp("fun2 done");
             },3000);

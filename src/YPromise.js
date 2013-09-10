@@ -1,7 +1,7 @@
 /***
  * a javascript Promise library .
  *
- * define a asyn function use promise:
+ * define a async function use promise:
  *
  *      function getContent(){
  *          return new YPromise(function(comp,err,prog){
