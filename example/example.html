@@ -110,6 +110,18 @@ function 2 progress: <span id="prog2"></span>% <br />
         console.log("done "+ data);
     });
 
+    function fun5(){
+        return "fun5 return";
+    }
+
+    var PromiseD = YPro.as(fun5())
+            .done(function(data){
+                console.log(data);
+                return fun4();
+            })
+            .done(function(data){
+                console.log(data);
+            });
 
 </script>
 </body>
