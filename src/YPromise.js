@@ -40,16 +40,22 @@
         this._thens = [];
         function _comp(){
             var args = arguments;
-            args = z._thens.shift().comp.apply(context,args);
-            if(args){
-                args._thens = z._thens;
+            var current = z._thens.shift();
+            if(current){
+                args = current.comp.apply(context,args);
+                if(args){
+                    args._thens = z._thens;
+                }
             }
         }
         function _err(){
             var args = arguments;
-            args = z._thens.shift().err.apply(context,args);
-            if(args){
-                args._thens = z._thens;
+            var current = z._thens.shift();
+            if(current && current.err){
+                args = current.err.apply(context,args);
+                if(args){
+                    args._thens = z._thens;
+                }
             }
         }
         setTimeout(function(){
@@ -75,6 +81,13 @@
             })
         }
         return this;
+    };
+
+    YPromise.prototype.cancel = function(callback){
+        this._thens.length = 0;
+        if(callback instanceof Function){
+            callback();
+        }
     };
 
     window.YPro = window.YPromise = YPromise;

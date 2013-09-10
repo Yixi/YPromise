@@ -34,11 +34,20 @@
         })
         .then(function(d){
             console.log(d," -"+new Date());
+            return fun1();
         },function(e){
             console.error(e);
+        })
+        .then(function(d){
+            console.log(d," - "+new Date());
         });
 
     console.log('end of code'," -"+new Date());
+    setTimeout(function(){
+        PromiseA.cancel(function(){
+            console.log("promiseA canceled");
+        });
+    },8000);
     console.log(PromiseA);
 </script>
 </body>
