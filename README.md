@@ -5,7 +5,7 @@ YPromise is a lightweight javascript async Promises library.
 
 ##How to use
 
-If you have used WinJS promise developed windows8 app before, you can easily get started.
+If you have used WinJS promise to developed windows8 app before, you can easily get started.
 
 1. you need to defined you async function use the `YPro` or `YPromise` to return a Promise object.
 <pre>
