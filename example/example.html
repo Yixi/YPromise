@@ -81,7 +81,33 @@ function 2 progress: <span id="prog2"></span>% <br />
             log("promiseA canceled @ "+new Date());
         });
     },15000);
-    console.log(PromiseA);
+
+    function fun3(){
+        return new YPro(function(comp,err){
+            setTimeout(function(){
+                log('fun3 done');
+                err('in fun3',"fun3 arg2");
+            },3000);
+        })
+    }
+
+    function fun4(){
+        return new YPro(function(comp,err){
+            setTimeout(function(){
+               log('fun4 done');
+                comp('in fun4');
+            },1000);
+        });
+    }
+
+    var PromiseB  = YPro.join(fun3(),fun4()).then(function(data3,data4){
+        console.log(data3,data4,'all done');
+    },function(e){
+        console.error(arguments);
+    });
+
+
+
 </script>
 </body>
 </html>

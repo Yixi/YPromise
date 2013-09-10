@@ -70,8 +70,10 @@
         setTimeout(function(){
             worker.call(context,_comp,_err,_prog);
         },0);
+
     };
 
+    /* public method */
     YPromise.prototype.then = function(comp,err,prog){
         if(comp instanceof Function){
 
@@ -98,6 +100,36 @@
         if(callback instanceof Function){
             callback();
         }
+    };
+
+    YPromise.join = function(){
+        var args = arguments,
+            len = args.length,
+            counter = 0,
+            results=[];
+
+        return new YPromise(function(comp,err,prog){
+            for(var i= 0;i<len;i++){
+                (function(i){
+                    args[i].then(function(){
+                        if(arguments.length<=1){
+                            results[i] = arguments[0];
+                        }else{
+                            results[i] = arguments;
+                        }
+                        counter++;
+                        prog(counter);
+                        if(counter==len){
+                            comp.apply(this,results);
+                        }
+                    },function(){
+                        var _args = Array.prototype.slice.call(arguments);
+                        _args.push('error in function '+i);
+                        err.apply(this,_args);
+                    });
+                })(i)
+            }
+        });
     };
 
     window.YPro = window.YPromise = YPromise;
