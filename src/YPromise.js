@@ -59,17 +59,26 @@
                 }
             }
         }
+        function _prog(){
+            var args = arguments;
+            var current = z._thens[0];
+            if(current && current.prog){
+                current.prog.apply(context,args);
+            }
+        }
+
         setTimeout(function(){
-            worker.call(context,_comp,_err);
+            worker.call(context,_comp,_err,_prog);
         },0);
     };
 
-    YPromise.prototype.then = function(comp,err){
+    YPromise.prototype.then = function(comp,err,prog){
         if(comp instanceof Function){
 
             this._thens.push({
                 comp:comp,
-                err:err
+                err:err,
+                prog:prog
             });
         }
         return this;

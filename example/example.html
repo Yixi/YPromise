@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example</title>
+    <script src="../src/YPromise.js"></script>
+</head>
+<body>
+<div id="console">
+function 1 progress: <span id="prog"></span>% <br />
+function 2 progress: <span id="prog2"></span>% <br />
+</div>
+
+<script>
+
+    function log(message){
+        document.getElementById('console').innerHTML+=message+'<br/>';
+    }
+
+    function fun1(){
+        return new YPro(function(comp,err,prog){
+            var i = 0;
+            function sleep(){
+                i++;
+                if(i>100){
+                    comp("fun1 done");
+                }else{
+                    prog(i);
+                    setTimeout(function(){
+                        sleep();
+                    },100);
+                }
+            }
+            sleep();
+        });
+    }
+
+    function fun2(){
+        return new YPro(function(comp,err,prog){
+            var i = 0;
+            function sleep(){
+                i++;
+                if(i>100){
+                    comp("fun2 done");
+                }else{
+                    prog(i);
+                    setTimeout(function(){
+                        sleep();
+                    },100);
+                }
+            }
+            sleep();
+        })
+    }
+
+    log('start of code @ '+new Date());
+
+    var PromiseA = fun1()
+        .then(function(data){
+            log(data+" @ "+new Date());
+            return fun2();
+        },function(error){
+
+        },function(prog){
+            document.getElementById('prog').innerHTML = prog;
+        })
+        .then(function(d){
+            log(d+" @ "+new Date());
+            return fun1();
+        },function(e){
+            console.error(e);
+        },function(prog){
+            document.getElementById('prog2').innerHTML = prog;
+        })
+        .then(function(d){
+            log(d+" @ "+new Date());
+        });
+
+    log('end of code @ '+new Date());
+    setTimeout(function(){
+        PromiseA.cancel(function(){
+            log("promiseA canceled @ "+new Date());
+        });
+    },15000);
+    console.log(PromiseA);
+</script>
+</body>
+</html>
