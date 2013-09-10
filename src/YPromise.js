@@ -28,6 +28,7 @@
  *
  *                      });
  */
+'use strict';
 
 (function(){
 
@@ -78,7 +79,7 @@
         if(comp instanceof Function){
             this._thens.push({
                 comp:comp
-            })
+            });
         }
         return this;
     };

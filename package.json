@@ -1,6 +1,6 @@
 {
     "name":"YPromise",
-    "version":"0.0.1",
+    "version":"alpha",
     "description":"a js promise library like WinJS style",
     "author":{
         "name":"yixi",
