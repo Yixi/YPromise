@@ -35,15 +35,26 @@
      *
      * @constructor
      */
-    var YPromise = function(fn){
+    var YPromise = function(worker,context){
         var z = this;
         this._thens = [];
-        function success(){
-
+        function _comp(){
+            var args = arguments;
+            args = z._thens.shift().comp.apply(context,args);
+            if(args){
+                args._thens = z._thens;
+            }
         }
-
-//        fn(this.done.bind(this));
-//        fn(this.done);
+        function _err(){
+            var args = arguments;
+            args = z._thens.shift().err.apply(context,args);
+            if(args){
+                args._thens = z._thens;
+            }
+        }
+        setTimeout(function(){
+            worker.call(context,_comp,_err);
+        },0);
     };
 
     YPromise.prototype.then = function(comp,err){
@@ -57,8 +68,13 @@
         return this;
     };
 
-    YPromise.prototype.done = function(fn){
-
+    YPromise.prototype.done = function(comp){
+        if(comp instanceof Function){
+            this._thens.push({
+                comp:comp
+            })
+        }
+        return this;
     };
 
     window.YPro = window.YPromise = YPromise;

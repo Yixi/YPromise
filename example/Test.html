@@ -13,7 +13,7 @@
         return new YPro(function(comp,err,prog){
             setTimeout(function(){
                 comp("fun1 done");
-            },1000);
+            },3000);
         });
     }
 
@@ -21,18 +21,25 @@
         return new YPro(function(comp,err,prog){
             setTimeout(function(){
                 comp("fun2 done");
-            },1000);
+            },3000);
         })
     }
 
-//    console.log(fun1());
-    console.log(fun1().done(function(data){console.log(data);return fun2();}));
+    console.log('start of code -',new Date());
 
-//    fun1().done(function(data){
-////        console.log(data);
-//        return fun2;
-//    });
+    var PromiseA = fun1()
+        .done(function(data){
+            console.log(data," -"+new Date());
+            return fun2();
+        })
+        .then(function(d){
+            console.log(d," -"+new Date());
+        },function(e){
+            console.error(e);
+        });
 
+    console.log('end of code'," -"+new Date());
+    console.log(PromiseA);
 </script>
 </body>
 </html>
