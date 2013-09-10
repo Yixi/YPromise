@@ -1,0 +1,20 @@
+{
+    "name":"YPromise",
+    "version":"0.0.1",
+    "description":"a js promise library",
+    "author":{
+        "name":"yixi",
+        "email":"lyh1112@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Yixi/YPromise.git"
+    },
+    "devDependencies":{
+        "grunt": "~0.4.1",
+        "grunt-contrib-jshint": "~0.1.1",
+        "grunt-contrib-concat":"~0.1.0",
+        "grunt-contrib-uglify":"~0.1.0",
+        "grunt-contrib-watch":"~0.1.0"
+    }
+}
