@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <script src="../src/YPromise.js"></script>
+</head>
+<body>
+
+
+<script>
+
+    function fun1(){
+        return new YPro(function(comp,err,prog){
+            setTimeout(function(){
+                comp("fun1 done");
+            },1000);
+        });
+    }
+
+    function fun2(){
+        return new YPro(function(comp,err,prog){
+            setTimeout(function(){
+                comp("fun2 done");
+            },1000);
+        })
+    }
+
+//    console.log(fun1());
+    console.log(fun1().done(function(data){console.log(data);return fun2();}));
+
+//    fun1().done(function(data){
+////        console.log(data);
+//        return fun2;
+//    });
+
+</script>
+</body>
+</html>

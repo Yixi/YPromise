@@ -1,7 +1,7 @@
 {
     "name":"YPromise",
     "version":"0.0.1",
-    "description":"a js promise library",
+    "description":"a js promise library like WinJS style",
     "author":{
         "name":"yixi",
         "email":"lyh1112@gmail.com"
