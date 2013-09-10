@@ -60,10 +60,9 @@
             }
         }
         function _prog(){
-            var args = arguments;
             var current = z._thens[0];
             if(current && current.prog){
-                current.prog.apply(context,args);
+                current.prog.apply(context,arguments);
             }
         }
 
@@ -107,7 +106,6 @@
             len = args.length,
             counter = 0,
             results=[];
-
         return new YPromise(function(comp,err,prog){
             for(var i= 0;i<len;i++){
                 (function(i){
@@ -131,6 +129,23 @@
             }
         });
     };
+
+    YPromise.any = function(){
+        var args = arguments,
+            len = args.length,
+            doneFlag = false;
+        return new YPromise(function(comp){
+            for(var i=0;i<len;i++){
+                args[i].done(function(){
+                    if(!doneFlag){
+                        doneFlag = true;
+                        comp.apply(this,arguments);
+                    }
+                })
+            }
+        });
+    };
+
 
     window.YPro = window.YPromise = YPromise;
 })();

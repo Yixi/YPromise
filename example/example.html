@@ -86,7 +86,7 @@ function 2 progress: <span id="prog2"></span>% <br />
         return new YPro(function(comp,err){
             setTimeout(function(){
                 log('fun3 done');
-                err('in fun3',"fun3 arg2");
+                comp('in fun3',"fun3 arg2");
             },3000);
         })
     }
@@ -106,6 +106,9 @@ function 2 progress: <span id="prog2"></span>% <br />
         console.error(arguments);
     });
 
+    var PromiseC = YPro.any(fun3(),fun4()).done(function(data){
+        console.log("done "+ data);
+    });
 
 
 </script>
