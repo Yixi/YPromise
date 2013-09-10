@@ -1,6 +1,5 @@
 YPromise
 ====
-version 
 YPromise is a lightweight javascript async Promises library.
 
 ##How to use
