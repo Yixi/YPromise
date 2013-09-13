@@ -21,8 +21,8 @@ function fun4(){
 }
 var aPromise = fun3()
 				.then(function(d){console.log(d); return fun4();})
-				.done(function(){return fun3();})
-				.done(function(){return fun4();})
+				.then(function(){return fun3();})
+				.then(function(){return fun4();})
 				.done(function(){
 					console.log("fun3->fun4->fun3->fun4 done");
 				})
@@ -102,7 +102,7 @@ var PromiseA = fun1()
 	);
 </pre>
 
-###`.done`
+###`.done` (待完善)
 提供和then一样的作用，此方法不会传递错误值，将会把异常直接抛出
 <pre>
 YPro.done(omComplete);
