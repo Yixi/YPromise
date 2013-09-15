@@ -91,7 +91,7 @@
                 comp:comp
             });
         }
-        return this;
+        return null;
     };
 
     YPromise.prototype.cancel = function(callback){
