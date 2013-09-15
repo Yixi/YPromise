@@ -40,9 +40,9 @@ setTimeout(function(){
 如果你以前使用过window8开发中的WinJS.promise对象，你可以快速上手。
 
 ###`YPro(Function)` or `YPromise(Function)` 构造器
-初始化一个promise对象
+初始化一个promise对象,其中YPro提供一个对YPromise的简洁访问
 <pre>
-var aPromise = new YPro(init);
+var aPromise = new YPromise(init);
 </pre>
 init方法中可传入三个参数，后面两个为可选
 
@@ -108,9 +108,67 @@ var PromiseA = fun1()
 YPro.done(omComplete);
 </pre>
 
+###`YPromise.join`
+
+合并多个promise，当所有Promise完成后将会执行then方法，返回对应位置promise的返回，若promise返回参数多于一个，将会以数组的形式传递返回。
+<pre>
+YPro.join(promise1,promise2,...).then(onComplete);
+</pre>
+参数：
+一个或多个YPromsie对象
+
+返回：该方法将会返回一个`YPromise`对象
+<pre>
+var PromiseAll = YPro.join(fn1(),fn2())
+			.then(function(data1,data2){
+				console.log(data1,data2);
+			})
+</pre>
 
 
+###`YPromise.any`
+用法类似`YPromise.join`,但不需要等待所有proimise完成，一旦其中任意一个promise完成将会立即传递这个promise的返回值。
+<pre>
+YPro.any(promise1,promise2,…).then(onComplete);
+</pre>
 
+返回，该方法返回一个`YPromise`对象
+
+<pre>
+var PromiseAny = YPro.join(fn1(),fn2())
+			.then(function(data){
+				console.log(data);
+			});
+</pre>
+
+###`YPromise.as`
+此方法将会把同步方法以Promise的方式调用,以解决特殊时候需求
+
+<pre>
+YPro.as(Function).then(onComplete);
+</pre>
+
+返回：该方法将会返回一个`YPromise`对象
+
+<pre>
+function fn5(){
+	return 'function 5 done';
+}
+var PromiseAs = YPro.as(fn5())
+			.then(function(data){
+				console.log(data);
+			});
+
+</pre>
+
+###`YPromise.cancel`
+调用该方法将会取消promise链的向下执行
+<pre>
+YPromsise.cancel();
+</pre>
+
+***
+更多用法请参考/example例子
 
 
 
