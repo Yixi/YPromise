@@ -123,6 +123,13 @@ function 2 progress: <span id="prog2"></span>% <br />
                 console.log(data);
             });
 
+    function fn6(){
+        return new YPro(function(comp,err,prog){
+            err("diigo");
+        });
+    }
+
+    fn6().done(function(e){console.log(e)});
 </script>
 </body>
 </html>

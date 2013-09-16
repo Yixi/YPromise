@@ -88,7 +88,10 @@
     YPromise.prototype.done = function(comp){
         if(comp instanceof Function){
             this._thens.push({
-                comp:comp
+                comp:comp,
+                err:function(error){
+                    throw error;
+                }
             });
         }
         return null;
