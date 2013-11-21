@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ypromise : A javascript promise library" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ypromise</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Yixi/YPromise">View on GitHub</a>
+
+          <h1 id="project_title">Ypromise</h1>
+          <h2 id="project_tagline">A javascript promise library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Yixi/YPromise/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Yixi/YPromise/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="ypromise" class="anchor" href="#ypromise"><span class="octicon octicon-link"></span></a>YPromise</h1>
+
+<p>基于 <a href="http://wiki.commonjs.org/wiki/Promises">Common JS Promises/A</a> 建议的js异步编程库，提供一种Promise机制来管理js中的异步交互。</p>
+
+<h2>
+<a name="%E4%BD%BF%E7%94%A8" class="anchor" href="#%E4%BD%BF%E7%94%A8"><span class="octicon octicon-link"></span></a>使用</h2>
+
+<pre>
+function fun3(){
+     return new YPro(function(comp,err){
+        setTimeout(function(){
+             comp('fun3 done');
+        },3000);
+     })
+}
+function fun4(){
+     return new YPro(function(comp,err){
+        setTimeout(function(){
+             comp('fun4 done');
+        },1000);
+     })
+}
+var aPromise = fun3()
+                .then(function(d){console.log(d); return fun4();})
+                .then(function(){return fun3();})
+                .then(function(){return fun4();})
+                .done(function(){
+                    console.log("fun3-&gt;fun4-&gt;fun3-&gt;fun4 done");
+                })
+
+setTimeout(function(){
+    aPromise.cancel(function(){
+        console.log("Promise canceled");
+    });
+},9000);
+
+</pre>
+
+<h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p>如果你以前使用过window8开发中的WinJS.promise对象，你可以快速上手。</p>
+
+<h3>
+<a name="yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8" class="anchor" href="#yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8"><span class="octicon octicon-link"></span></a><code>YPro(Function)</code> or <code>YPromise(Function)</code> 构造器</h3>
+
+<p>初始化一个promise对象,其中YPro提供一个对YPromise的简洁访问</p>
+
+<pre>
+var aPromise = new YPromise(init);
+</pre>
+
+<p>init方法中可传入三个参数，后面两个为可选</p>
+
+<ul>
+<li>
+<em>completeDispatch</em> 初始化代码中操作完成后需要调用这个函数传递结果</li>
+<li>
+<em>errorDispatch</em> 当发生错误时需要调用这方法传递错误</li>
+<li>
+<em>progressDispatch</em> 如果异步操作需要支持进度条，初始化代码应该定期调用这个功能，并传递一个进度中间值</li>
+</ul><p>你需要使用这个返回一个promise对象来包裹你的异步函数</p>
+
+<pre>
+/*example for constructor*/
+
+function fn1(){
+    return new YPro(function(comp,err,prog){
+        var i = 0;
+        function sleep(){
+            i++;
+            if(i&gt;100){
+                comp('fun1 done');
+            }else{
+                prog(i);
+                setTimeout(function(){
+                    sleep();
+                },100);
+            }           
+        }
+        sleep();
+    });
+}
+</pre>
+
+<h3>
+<a name="then" class="anchor" href="#then"><span class="octicon octicon-link"></span></a><code>.then</code>
+</h3>
+
+<p>指定promise完成后执行的函数，如果promise未完成则进行错误处理，以及处理进度变化通知</p>
+
+<pre>
+YPro.then(onComplete, onError, onProgress).done();
+</pre>
+
+<p>参数:</p>
+
+<ul>
+<li>
+<em>onComplete</em> promise成功后将会执行此方法，参数来自构造函数中的 <em>completeDispatch</em> 传递</li>
+<li>
+<em>onError</em> promise发生错误将会调用此方法</li>
+<li>
+<em>onProgress</em> 如果promise函数中有来自 <em>progressDispatch</em> 调用将会触发此方法</li>
+</ul><p>返回：
+该方法将会返回一个 <code>YPromise</code> 对象</p>
+
+<pre>
+var PromiseA = fun1()
+    .then(
+        function(data){
+            console.log(data);
+        },
+        function(error){
+            console.error(error);
+        },
+        function(prog){
+            console.log(prog+"%");
+        }
+    );
+</pre>
+
+<h3>
+<a name="done-%E5%BE%85%E5%AE%8C%E5%96%84" class="anchor" href="#done-%E5%BE%85%E5%AE%8C%E5%96%84"><span class="octicon octicon-link"></span></a><code>.done</code> (待完善)</h3>
+
+<p>提供和then一样的作用，此方法不会传递错误值，将会把异常直接抛出</p>
+
+<pre>
+YPro.done(omComplete);
+</pre>
+
+<h3>
+<a name="ypromisejoin" class="anchor" href="#ypromisejoin"><span class="octicon octicon-link"></span></a><code>YPromise.join</code>
+</h3>
+
+<p>合并多个promise，当所有Promise完成后将会执行then方法，返回对应位置promise的返回，若promise返回参数多于一个，将会以数组的形式传递返回。</p>
+
+<pre>
+YPro.join(promise1,promise2,...).then(onComplete);
+</pre>
+
+<p>参数：
+一个或多个YPromsie对象</p>
+
+<p>返回：该方法将会返回一个<code>YPromise</code>对象</p>
+
+<pre>
+var PromiseAll = YPro.join(fn1(),fn2())
+            .then(function(data1,data2){
+                console.log(data1,data2);
+            })
+</pre>
+
+<h3>
+<a name="ypromiseany" class="anchor" href="#ypromiseany"><span class="octicon octicon-link"></span></a><code>YPromise.any</code>
+</h3>
+
+<p>用法类似<code>YPromise.join</code>,但不需要等待所有proimise完成，一旦其中任意一个promise完成将会立即传递这个promise的返回值。</p>
+
+<pre>
+YPro.any(promise1,promise2,…).then(onComplete);
+</pre>
+
+<p>返回，该方法返回一个<code>YPromise</code>对象</p>
+
+<pre>
+var PromiseAny = YPro.join(fn1(),fn2())
+            .then(function(data){
+                console.log(data);
+            });
+</pre>
+
+<h3>
+<a name="ypromiseas" class="anchor" href="#ypromiseas"><span class="octicon octicon-link"></span></a><code>YPromise.as</code>
+</h3>
+
+<p>此方法将会把同步方法以Promise的方式调用,以解决特殊时候需求</p>
+
+<pre>
+YPro.as(Function).then(onComplete);
+</pre>
+
+<p>返回：该方法将会返回一个<code>YPromise</code>对象</p>
+
+<pre>
+function fn5(){
+    return 'function 5 done';
+}
+var PromiseAs = YPro.as(fn5())
+            .then(function(data){
+                console.log(data);
+            });
+
+</pre>
+
+<h3>
+<a name="ypromisecancel" class="anchor" href="#ypromisecancel"><span class="octicon octicon-link"></span></a><code>YPromise.cancel</code>
+</h3>
+
+<p>调用该方法将会取消promise链的向下执行</p>
+
+<pre>
+YPromsise.cancel();
+</pre>
+
+<hr><p>更多用法请参考/example例子</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ypromise maintained by <a href="https://github.com/Yixi">Yixi</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
