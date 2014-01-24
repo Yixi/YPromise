@@ -150,7 +150,7 @@
         return new YPromise(function(comp){
             comp(sync);
         });
-    }
+    };
 
     window.YPro = window.YPromise = YPromise;
 })();
