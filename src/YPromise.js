@@ -154,6 +154,18 @@
             comp(sync);
         });
     };
+    /**
+     *
+     * @param time {Int}
+     * @returns {YPromise}
+     */
+    YPromise.sleep = function(time){
+        return new YPromise(function(comp){
+            setTimeout(function(){
+                comp();
+            },parseInt(time));
+        });
+    };
 
     window.YPro = window.YPromise = YPromise;
 })();
