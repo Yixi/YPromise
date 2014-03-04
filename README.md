@@ -125,6 +125,48 @@ var PromiseAll = YPro.join(fn1(),fn2())
 			})
 </pre>
 
+###`YPromise.queue`
+执行一个返回Ypromise的队列方法
+<pre>
+ YPromise.queue(array,isOrder).then()
+</pre>
+该方法传入两个参数，第二个参数为可选
+
+* _array_ 一个待执行包含返回promise对象的function数组
+* _isOrder_ 默认false，若为true，将会按顺序执行array队列中的方法，且设置为true后，将会把单个方法错误信息放到onComplete回调中
+
+返回，该方法返回一个 `Ypromise` 对象
+
+<pre>
+var args = [];
+for(var i=0;i<50;i++){
+    args.push(i);
+}
+
+var taskList = args.map(function(arg){
+     return function(){
+        return new YPro(function(comp,err,prog){
+            setTimeout(function(){
+                console.log('in function',arg);
+                comp('callback '+arg);
+            },1000);
+        });
+    }
+});
+
+YPro.queue(taskList)
+	.then(function(){
+		console.log(arguments);
+		return YPro.queue(taskList,true);
+	})
+	.then(function(){
+		console.log(arguments);
+	});
+
+</pre>
+
+
+
 
 ###`YPromise.any`
 用法类似`YPromise.join`,但不需要等待所有proimise完成，一旦其中任意一个promise完成将会立即传递这个promise的返回值。

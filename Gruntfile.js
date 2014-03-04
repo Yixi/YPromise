@@ -3,7 +3,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         //Metadata.
         pkg: grunt.file.readJSON('package.json'),
-        banner: '/*! YPromise <%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        banner: '/*! YPromise <%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> \n @Author Yixi \n https://github.com/Yixi/YPromise */\n',
         //Task
         concat: {
 

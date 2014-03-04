@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example for queue</title>
+    <script src="../src/YPromise.js"></script>
+</head>
+<body>
+
+
+<script>
+    var args = [];
+    for(var i=0;i<50;i++){
+        args.push(i);
+    }
+
+    var taskList = args.map(function(arg){
+        return function(){
+            return new YPro(function(comp,err,prog){
+                setTimeout(function(){
+                    console.log('in function',arg);
+                    comp('callback '+arg);
+                },1000);
+            });
+        }
+    });
+
+
+    var A1 = function(arg){
+        return new YPro(function(comp,err,prog){
+            setTimeout(function(){
+                console.log('task A1 for ',arg);
+                comp(arg);
+            },100);
+        });
+    };
+
+    var A2 = function(arg){
+        return new YPro(function(comp,err,prog){
+            setTimeout(function(){
+                console.log('task A2 for ',arg);
+                comp(arg);
+            },100);
+        });
+    };
+
+    var A3 = function(arg){
+        return new YPro(function(comp,err,prog){
+            setTimeout(function(){
+                console.log('task A3 for ',arg);
+                comp('callback A1->A2->A3 for '+arg);
+            },100);
+        });
+    };
+
+    var taskA123 = args.map(function(arg){
+        return function(){
+            return new YPro(function(comp,err,prog){
+                A1(arg)
+                        .then(function(a2){
+                            return A2(a2);
+                        })
+                        .then(function(a3){
+                            return A3(a3);
+                        })
+                        .then(function(re){
+                           comp(re);
+                        });
+            });
+        }
+    });
+
+    console.group("Task list for 100 sync function")
+    YPro.queue(taskList)
+            .then(function(){
+                console.log(arguments);
+                console.groupEnd();
+                console.group("Task list for 100 sync (A1->A2->A3)");
+                return YPro.queue(taskA123);
+            })
+            .then(function(){
+                console.log(arguments);
+                console.groupEnd();
+                console.group("Task list for 100 sync (A1->A2->A3) by order");
+                return YPro.queue(taskA123,true);
+            })
+            .then(function(){
+                console.log(arguments);
+                console.groupEnd();
+            })
+
+</script>
+
+</body>
+</html>

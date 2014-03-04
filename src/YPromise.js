@@ -1,5 +1,8 @@
 /***
  * a javascript Promise library .
+ * @Author:Yixi
+ *
+ * https://github.com/Yixi/YPromise
  *
  * define a async function use promise:
  *
@@ -72,6 +75,12 @@
 
     };
 
+    /*private help method*/
+    var isArray = function(obj){
+        return obj instanceof Array;
+    };
+
+
     /* public method */
     YPromise.prototype.then = function(comp,err,prog){
         if(comp instanceof Function){
@@ -105,14 +114,21 @@
     };
 
     YPromise.join = function(){
-        var args = arguments,
-            len = args.length,
+        var args;
+        var isQueue = false;
+        if(arguments.length == 1 && isArray(arguments[0])){
+            args = arguments[0];
+            isQueue = true;
+        }else{
+            args = arguments;
+        }
+        var len = args.length,
             counter = 0,
             results=[];
         return new YPromise(function(comp,err,prog){
             for(var i= 0;i<len;i++){
                 (function(i){
-                    args[i].then(function(){
+                    (isQueue ? args[i]() : args[i]).then(function(){
                         if(arguments.length<=1){
                             results[i] = arguments[0];
                         }else{
@@ -133,13 +149,49 @@
         });
     };
 
+    YPromise.queue = function(tasks,isOrder){
+        if(!isOrder){
+            return YPromise.join(tasks);
+        }
+        return new YPromise(function(comp,err,prog){
+            var len = tasks.length,
+                counter = 0,
+                results = [];
+            process(0);
+            function process(i){
+                tasks[i]().then(function(){
+                    if(arguments.length<=1){
+                        results[i] = arguments[0];
+                    }else{
+                        results[i] = arguments;
+                    }
+                    counter++;
+                    prog(counter);
+                    if(counter==len){
+                        comp.apply(this,results);
+                    }else{
+                        process(counter);
+                    }
+                },function(){
+                    results[i] = 'error in function ' + i;
+                    counter++;
+                    if(counter==len){
+                        comp.apply(this,results);
+                    }else{
+                        process(counter);
+                    }
+                });
+            }
+        });
+    };
+
     YPromise.any = function(){
         var args = arguments,
             len = args.length,
             doneFlag = false;
         return new YPromise(function(comp){
             for(var i=0;i<len;i++){
-                args[i].done(function(){
+                args[i].then(function(){
                     if(!doneFlag){
                         doneFlag = true;
                         comp.apply(this,arguments);
@@ -166,6 +218,7 @@
             },parseInt(time));
         });
     };
+
 
     window.YPro = window.YPromise = YPromise;
 })();
