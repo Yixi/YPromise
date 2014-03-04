@@ -137,33 +137,33 @@ var PromiseAll = YPro.join(fn1(),fn2())
 
 返回，该方法返回一个 `Ypromise` 对象
 
-<pre>
+```javascript```
 var args = [];
-for(var i=0;i<50;i++){
+for(var i=0;i<50; i++){
     args.push(i);
 }
 
 var taskList = args.map(function(arg){
-     return function(){
+    return function(){
         return new YPro(function(comp,err,prog){
-            setTimeout(function(){
-                console.log('in function',arg);
-                comp('callback '+arg);
-            },1000);
+	    setTimeout(function(){
+	        console.log('in function',arg);
+	        comp('callback '+arg);
+	    },300);
         });
-    }
+    };
 });
 
 YPro.queue(taskList)
-	.then(function(){
-		console.log(arguments);
-		return YPro.queue(taskList,true);
-	})
-	.then(function(){
-		console.log(arguments);
-	});
+    .then(function(){
+        cosole.log(arguments);
+        return YPro.queue(taskList,true);
+    })
+    .then(function(){
+        console.log(arguments);
+    });
 
-</pre>
+```
 
 
 
