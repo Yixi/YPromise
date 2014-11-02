@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Ypromise : A javascript promise library" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Ypromise : A javascript promise library">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -39,36 +39,35 @@
 <h2>
 <a name="%E4%BD%BF%E7%94%A8" class="anchor" href="#%E4%BD%BF%E7%94%A8"><span class="octicon octicon-link"></span></a>使用</h2>
 
-<pre>
-function fun3(){
-     return new YPro(function(comp,err){
-        setTimeout(function(){
-             comp('fun3 done');
-        },3000);
-     })
-}
-function fun4(){
-     return new YPro(function(comp,err){
-        setTimeout(function(){
-             comp('fun4 done');
-        },1000);
-     })
-}
-var aPromise = fun3()
-                .then(function(d){console.log(d); return fun4();})
-                .then(function(){return fun3();})
-                .then(function(){return fun4();})
-                .done(function(){
-                    console.log("fun3-&gt;fun4-&gt;fun3-&gt;fun4 done");
-                })
+<div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">fun3</span><span class="p">(){</span>
+     <span class="k">return</span> <span class="k">new</span> <span class="nx">YPro</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">comp</span><span class="p">,</span><span class="nx">err</span><span class="p">){</span>
+        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+             <span class="nx">comp</span><span class="p">(</span><span class="s1">'fun3 done'</span><span class="p">);</span>
+        <span class="p">},</span><span class="mi">3000</span><span class="p">);</span>
+     <span class="p">})</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">fun4</span><span class="p">(){</span>
+     <span class="k">return</span> <span class="k">new</span> <span class="nx">YPro</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">comp</span><span class="p">,</span><span class="nx">err</span><span class="p">){</span>
+        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+             <span class="nx">comp</span><span class="p">(</span><span class="s1">'fun4 done'</span><span class="p">);</span>
+        <span class="p">},</span><span class="mi">1000</span><span class="p">);</span>
+     <span class="p">})</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">aPromise</span> <span class="o">=</span> <span class="nx">fun3</span><span class="p">()</span>
+                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span> <span class="k">return</span> <span class="nx">fun4</span><span class="p">();})</span>
+                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="nx">fun3</span><span class="p">();})</span>
+                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="nx">fun4</span><span class="p">();})</span>
+                <span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"fun3-&gt;fun4-&gt;fun3-&gt;fun4 done"</span><span class="p">);</span>
+                <span class="p">})</span>
 
-setTimeout(function(){
-    aPromise.cancel(function(){
-        console.log("Promise canceled");
-    });
-},9000);
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">aPromise</span><span class="p">.</span><span class="nx">cancel</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Promise canceled"</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">},</span><span class="mi">9000</span><span class="p">);</span>
 
-</pre>
+</pre></div>
 
 <h2>
 <a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
@@ -76,7 +75,8 @@ setTimeout(function(){
 <p>如果你以前使用过window8开发中的WinJS.promise对象，你可以快速上手。</p>
 
 <h3>
-<a name="yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8" class="anchor" href="#yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8"><span class="octicon octicon-link"></span></a><code>YPro(Function)</code> or <code>YPromise(Function)</code> 构造器</h3>
+<a name="yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8" class="anchor" href="#yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8"><span class="octicon octicon-link"></span></a>
+<code>YPro(Function)</code> or <code>YPromise(Function)</code> 构造器</h3>
 
 <p>初始化一个promise对象,其中YPro提供一个对YPromise的简洁访问</p>
 
@@ -93,7 +93,9 @@ var aPromise = new YPromise(init);
 <em>errorDispatch</em> 当发生错误时需要调用这方法传递错误</li>
 <li>
 <em>progressDispatch</em> 如果异步操作需要支持进度条，初始化代码应该定期调用这个功能，并传递一个进度中间值</li>
-</ul><p>你需要使用这个返回一个promise对象来包裹你的异步函数</p>
+</ul>
+
+<p>你需要使用这个返回一个promise对象来包裹你的异步函数</p>
 
 <pre>
 /*example for constructor*/
@@ -136,7 +138,9 @@ YPro.then(onComplete, onError, onProgress).done();
 <em>onError</em> promise发生错误将会调用此方法</li>
 <li>
 <em>onProgress</em> 如果promise函数中有来自 <em>progressDispatch</em> 调用将会触发此方法</li>
-</ul><p>返回：
+</ul>
+
+<p>返回：
 该方法将会返回一个 <code>YPromise</code> 对象</p>
 
 <pre>
@@ -155,7 +159,8 @@ var PromiseA = fun1()
 </pre>
 
 <h3>
-<a name="done-%E5%BE%85%E5%AE%8C%E5%96%84" class="anchor" href="#done-%E5%BE%85%E5%AE%8C%E5%96%84"><span class="octicon octicon-link"></span></a><code>.done</code> (待完善)</h3>
+<a name="done-%E5%BE%85%E5%AE%8C%E5%96%84" class="anchor" href="#done-%E5%BE%85%E5%AE%8C%E5%96%84"><span class="octicon octicon-link"></span></a>
+<code>.done</code> (待完善)</h3>
 
 <p>提供和then一样的作用，此方法不会传递错误值，将会把异常直接抛出</p>
 
@@ -237,7 +242,9 @@ var PromiseAs = YPro.as(fn5())
 YPromsise.cancel();
 </pre>
 
-<hr><p>更多用法请参考/example例子</p>
+<hr>
+
+<p>更多用法请参考/example例子</p>
       </section>
     </div>
 
