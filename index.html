@@ -1,79 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
+    <meta charset="UTF-8">
     <title>Ypromise by Yixi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>Ypromise</h1>
-        <h2>A javascript promise library</h2>
-        <a href="https://github.com/Yixi/YPromise" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+    <section class="page-header">
+      <h1 class="project-name">Ypromise</h1>
+      <h2 class="project-tagline">A javascript promise library</h2>
+      <a href="https://github.com/Yixi/YPromise" class="btn">View on GitHub</a>
+      <a href="https://github.com/Yixi/YPromise/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Yixi/YPromise/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-<a name="ypromise" class="anchor" href="#ypromise"><span class="octicon octicon-link"></span></a>YPromise</h1>
+    <section class="main-content">
+      <h1>
+<a id="ypromise" class="anchor" href="#ypromise" aria-hidden="true"><span class="octicon octicon-link"></span></a>YPromise</h1>
 
 <p>基于 <a href="http://wiki.commonjs.org/wiki/Promises">Common JS Promises/A</a> 建议的js异步编程库，提供一种Promise机制来管理js中的异步交互。</p>
 
 <h2>
-<a name="%E4%BD%BF%E7%94%A8" class="anchor" href="#%E4%BD%BF%E7%94%A8"><span class="octicon octicon-link"></span></a>使用</h2>
+<a id="使用" class="anchor" href="#%E4%BD%BF%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用</h2>
 
-<div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">fun3</span><span class="p">(){</span>
-     <span class="k">return</span> <span class="k">new</span> <span class="nx">YPro</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">comp</span><span class="p">,</span><span class="nx">err</span><span class="p">){</span>
-        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-             <span class="nx">comp</span><span class="p">(</span><span class="s1">'fun3 done'</span><span class="p">);</span>
-        <span class="p">},</span><span class="mi">3000</span><span class="p">);</span>
-     <span class="p">})</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">fun4</span><span class="p">(){</span>
-     <span class="k">return</span> <span class="k">new</span> <span class="nx">YPro</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">comp</span><span class="p">,</span><span class="nx">err</span><span class="p">){</span>
-        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-             <span class="nx">comp</span><span class="p">(</span><span class="s1">'fun4 done'</span><span class="p">);</span>
-        <span class="p">},</span><span class="mi">1000</span><span class="p">);</span>
-     <span class="p">})</span>
-<span class="p">}</span>
-<span class="kd">var</span> <span class="nx">aPromise</span> <span class="o">=</span> <span class="nx">fun3</span><span class="p">()</span>
-                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span> <span class="k">return</span> <span class="nx">fun4</span><span class="p">();})</span>
-                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="nx">fun3</span><span class="p">();})</span>
-                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="nx">fun4</span><span class="p">();})</span>
-                <span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"fun3-&gt;fun4-&gt;fun3-&gt;fun4 done"</span><span class="p">);</span>
-                <span class="p">})</span>
+<pre>
+function fun3(){
+     return new YPro(function(comp,err){
+        setTimeout(function(){
+             comp('fun3 done');
+        },3000);
+     })
+}
+function fun4(){
+     return new YPro(function(comp,err){
+        setTimeout(function(){
+             comp('fun4 done');
+        },1000);
+     })
+}
+var aPromise = fun3()
+                .then(function(d){console.log(d); return fun4();})
+                .then(function(){return fun3();})
+                .then(function(){return fun4();})
+                .done(function(){
+                    console.log("fun3-&gt;fun4-&gt;fun3-&gt;fun4 done");
+                })
 
-<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">aPromise</span><span class="p">.</span><span class="nx">cancel</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Promise canceled"</span><span class="p">);</span>
-    <span class="p">});</span>
-<span class="p">},</span><span class="mi">9000</span><span class="p">);</span>
+setTimeout(function(){
+    aPromise.cancel(function(){
+        console.log("Promise canceled");
+    });
+},9000);
 
-</pre></div>
+</pre>
 
 <h2>
-<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
 
 <p>如果你以前使用过window8开发中的WinJS.promise对象，你可以快速上手。</p>
 
 <h3>
-<a name="yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8" class="anchor" href="#yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8"><span class="octicon octicon-link"></span></a>
-<code>YPro(Function)</code> or <code>YPromise(Function)</code> 构造器</h3>
+<a id="yprofunction-or-ypromisefunction-构造器" class="anchor" href="#yprofunction-or-ypromisefunction-%E6%9E%84%E9%80%A0%E5%99%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>YPro(Function)</code> or <code>YPromise(Function)</code> 构造器</h3>
 
 <p>初始化一个promise对象,其中YPro提供一个对YPromise的简洁访问</p>
 
@@ -117,7 +108,7 @@ function fn1(){
 </pre>
 
 <h3>
-<a name="then" class="anchor" href="#then"><span class="octicon octicon-link"></span></a><code>.then</code>
+<a id="then" class="anchor" href="#then" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.then</code>
 </h3>
 
 <p>指定promise完成后执行的函数，如果promise未完成则进行错误处理，以及处理进度变化通知</p>
@@ -156,8 +147,7 @@ var PromiseA = fun1()
 </pre>
 
 <h3>
-<a name="done-%E5%BE%85%E5%AE%8C%E5%96%84" class="anchor" href="#done-%E5%BE%85%E5%AE%8C%E5%96%84"><span class="octicon octicon-link"></span></a>
-<code>.done</code> (待完善)</h3>
+<a id="done-待完善" class="anchor" href="#done-%E5%BE%85%E5%AE%8C%E5%96%84" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.done</code> (待完善)</h3>
 
 <p>提供和then一样的作用，此方法不会传递错误值，将会把异常直接抛出</p>
 
@@ -166,7 +156,7 @@ YPro.done(omComplete);
 </pre>
 
 <h3>
-<a name="ypromisejoin" class="anchor" href="#ypromisejoin"><span class="octicon octicon-link"></span></a><code>YPromise.join</code>
+<a id="ypromisejoin" class="anchor" href="#ypromisejoin" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>YPromise.join</code>
 </h3>
 
 <p>合并多个promise，当所有Promise完成后将会执行then方法，返回对应位置promise的返回，若promise返回参数多于一个，将会以数组的形式传递返回。</p>
@@ -188,7 +178,55 @@ var PromiseAll = YPro.join(fn1(),fn2())
 </pre>
 
 <h3>
-<a name="ypromiseany" class="anchor" href="#ypromiseany"><span class="octicon octicon-link"></span></a><code>YPromise.any</code>
+<a id="ypromisequeue" class="anchor" href="#ypromisequeue" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>YPromise.queue</code>
+</h3>
+
+<p>执行一个返回Ypromise的队列方法</p>
+
+<pre>
+ YPromise.queue(array,isOrder).then()
+</pre>
+
+<p>该方法传入两个参数，第二个参数为可选</p>
+
+<ul>
+<li>
+<em>array</em> 一个待执行包含返回promise对象的function数组</li>
+<li>
+<em>isOrder</em> 默认false，若为true，将会按顺序执行array队列中的方法，且设置为true后，将会把单个方法错误信息放到onComplete回调中</li>
+</ul>
+
+<p>返回，该方法返回一个 <code>Ypromise</code> 对象</p>
+
+<pre lang="javascript```"><code>var args = [];
+for(var i=0;i&lt;50; i++){
+    args.push(i);
+}
+
+var taskList = args.map(function(arg){
+    return function(){
+        return new YPro(function(comp,err,prog){
+        setTimeout(function(){
+            console.log('in function',arg);
+            comp('callback '+arg);
+        },300);
+        });
+    };
+});
+
+YPro.queue(taskList)
+    .then(function(){
+        cosole.log(arguments);
+        return YPro.queue(taskList,true);
+    })
+    .then(function(){
+        console.log(arguments);
+    });
+
+</code></pre>
+
+<h3>
+<a id="ypromiseany" class="anchor" href="#ypromiseany" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>YPromise.any</code>
 </h3>
 
 <p>用法类似<code>YPromise.join</code>,但不需要等待所有proimise完成，一旦其中任意一个promise完成将会立即传递这个promise的返回值。</p>
@@ -207,7 +245,7 @@ var PromiseAny = YPro.join(fn1(),fn2())
 </pre>
 
 <h3>
-<a name="ypromiseas" class="anchor" href="#ypromiseas"><span class="octicon octicon-link"></span></a><code>YPromise.as</code>
+<a id="ypromiseas" class="anchor" href="#ypromiseas" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>YPromise.as</code>
 </h3>
 
 <p>此方法将会把同步方法以Promise的方式调用,以解决特殊时候需求</p>
@@ -230,7 +268,7 @@ var PromiseAs = YPro.as(fn5())
 </pre>
 
 <h3>
-<a name="ypromisecancel" class="anchor" href="#ypromisecancel"><span class="octicon octicon-link"></span></a><code>YPromise.cancel</code>
+<a id="ypromisecancel" class="anchor" href="#ypromisecancel" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>YPromise.cancel</code>
 </h3>
 
 <p>调用该方法将会取消promise链的向下执行</p>
@@ -242,25 +280,16 @@ YPromsise.cancel();
 <hr>
 
 <p>更多用法请参考/example例子</p>
-        </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/Yixi/YPromise/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/Yixi/YPromise/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Yixi/YPromise">Ypromise</a> is maintained by <a href="https://github.com/Yixi">Yixi</a>.</span>
 
-          <p class="repo-owner"><a href="https://github.com/Yixi/YPromise"></a> is maintained by <a href="https://github.com/Yixi">Yixi</a>.</p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+    </section>
 
   
   </body>
 </html>
+
