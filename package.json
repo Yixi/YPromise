@@ -15,6 +15,5 @@
     "url": "https://github.com/Yixi/YPromise.git"
   },
   "devDependencies": {
-    "webpack": "^1.12.9"
   }
 }
