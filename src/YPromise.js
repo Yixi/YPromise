@@ -208,7 +208,7 @@
     };
     /**
      *
-     * @param time {Int}
+     * @param time {int}
      * @returns {YPromise}
      */
     YPromise.sleep = function(time){
@@ -219,6 +219,6 @@
         });
     };
 
-
-    window.YPro = window.YPromise = YPromise;
+    //window.YPro = window.YPromise = YPromise;
+    module.exports = YPromise
 })();

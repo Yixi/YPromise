@@ -1,20 +1,20 @@
 {
-    "name":"YPromise",
-    "version":"0.1.0",
-    "description":"a js promise library like WinJS style",
-    "author":{
-        "name":"yixi",
-        "email":"lyh1112@gmail.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Yixi/YPromise.git"
-    },
-    "devDependencies":{
-        "grunt": "~0.4.1",
-        "grunt-contrib-jshint": "~0.1.1",
-        "grunt-contrib-concat":"~0.1.0",
-        "grunt-contrib-uglify":"~0.1.0",
-        "grunt-contrib-watch":"~0.1.0"
-    }
+  "name": "YPromise",
+  "version": "0.1.0",
+  "description": "a js promise library like WinJS style",
+  "author": {
+    "name": "yixi",
+    "email": "lyh1112@gmail.com"
+  },
+  "main": "src/YPromise.js",
+  "scripts": {
+    "test": "mocha --harmony --reporter spec --full-trace"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yixi/YPromise.git"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.9"
+  }
 }
