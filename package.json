@@ -1,5 +1,5 @@
 {
-  "name": "YPromise",
+  "name": "y-promise",
   "version": "0.1.0",
   "description": "a js promise library like WinJS style",
   "author": {
