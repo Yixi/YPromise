@@ -137,7 +137,7 @@ var PromiseAll = YPro.join(fn1(),fn2())
 
 返回，该方法返回一个 `Ypromise` 对象
 
-```javascript```
+```
 var args = [];
 for(var i=0;i<50; i++){
     args.push(i);
