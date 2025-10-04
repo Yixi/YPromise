@@ -36,59 +36,64 @@
 (function(){
 
     /**
-     *
+     * YPromise constructor
+     * @param {Function} worker - The executor function
+     * @param {Object} context - The execution context
      * @constructor
      */
-    var YPromise = function(worker,context){
-        var z = this;
+    var YPromise = function(worker, context){
+        var self = this;
         this._thens = [];
+        
         function _comp(){
-            var args = arguments;
-            var current = z._thens.shift();
+            var current = self._thens.shift();
             if(current){
-                args = current.comp.apply(context,args);
-                if(args){
-                    args._thens = z._thens;
+                var result = current.comp.apply(context, arguments);
+                if(result){
+                    result._thens = self._thens;
                 }
             }
         }
+        
         function _err(){
-            var args = arguments;
-            var current = z._thens.shift();
+            var current = self._thens.shift();
             if(current && current.err){
-                args = current.err.apply(context,args);
-                if(args){
-                    args._thens = z._thens;
+                var result = current.err.apply(context, arguments);
+                if(result){
+                    result._thens = self._thens;
                 }
             }
         }
+        
         function _prog(){
-            var current = z._thens[0];
+            var current = self._thens[0];
             if(current && current.prog){
-                current.prog.apply(context,arguments);
+                current.prog.apply(context, arguments);
             }
         }
 
+        // Execute worker asynchronously but directly via setTimeout
         setTimeout(function(){
-            worker.call(context,_comp,_err,_prog);
-        },0);
-
+            worker.call(context, _comp, _err, _prog);
+        }, 0);
     };
 
-    /*private help method*/
+    /* Helper methods */
     var isArray = function(obj){
         return obj instanceof Array;
     };
 
+    var argsToArray = function(args, start){
+        return Array.prototype.slice.call(args, start || 0);
+    };
 
-    /* public method */
-    YPromise.prototype.then = function(comp,err,prog){
+    /* Public prototype methods */
+    YPromise.prototype.then = function(comp, err, prog){
         if(comp instanceof Function){
-
             this._thens.push({
-                comp:comp,
-                err:err,
-                prog:prog
+                comp: comp,
+                err: err,
+                prog: prog
             });
         }
         return this;
@@ -97,8 +102,8 @@
     YPromise.prototype.done = function(comp){
         if(comp instanceof Function){
             this._thens.push({
-                comp:comp,
-                err:function(error){
+                comp: comp,
+                err: function(error){
                     throw error;
                 }
             });
@@ -113,90 +118,105 @@
         }
     };
 
+    /* Static methods */
     YPromise.join = function(){
-        var args;
-        var isQueue = false;
-        if(arguments.length == 1 && isArray(arguments[0])){
+        var args, isQueue = false;
+        
+        if(arguments.length === 1 && isArray(arguments[0])){
             args = arguments[0];
             isQueue = true;
         }else{
-            args = arguments;
+            args = argsToArray(arguments);
         }
-        var len = args.length,
-            counter = 0,
-            results=[];
-        return new YPromise(function(comp,err,prog){
-            for(var i= 0;i<len;i++){
-                (function(i){
-                    (isQueue ? args[i]() : args[i]).then(function(){
-                        if(arguments.length<=1){
-                            results[i] = arguments[0];
-                        }else{
-                            results[i] = arguments;
-                        }
+        
+        var len = args.length;
+        var counter = 0;
+        var results = [];
+        
+        return new YPromise(function(comp, err, prog){
+            if(len === 0){
+                comp();
+                return;
+            }
+            
+            for(var i = 0; i < len; i++){
+                (function(index){
+                    var promise = isQueue ? args[index]() : args[index];
+                    promise.then(function(){
+                        results[index] = arguments.length <= 1 ? arguments[0] : argsToArray(arguments);
                         counter++;
                         prog(counter);
-                        if(counter==len){
-                            comp.apply(this,results);
+                        if(counter === len){
+                            comp.apply(this, results);
                         }
-                    },function(){
-                        var _args = Array.prototype.slice.call(arguments);
-                        _args.push('error in function '+i);
-                        err.apply(this,_args);
+                    }, function(){
+                        var errorArgs = argsToArray(arguments);
+                        errorArgs.push('error in function ' + index);
+                        err.apply(this, errorArgs);
                     });
-                })(i)
+                })(i);
             }
         });
     };
 
-    YPromise.queue = function(tasks,isOrder){
+    YPromise.queue = function(tasks, isOrder){
         if(!isOrder){
             return YPromise.join(tasks);
         }
-        return new YPromise(function(comp,err,prog){
-            var len = tasks.length,
-                counter = 0,
-                results = [];
-            process(0);
-            function process(i){
-                tasks[i]().then(function(){
-                    if(arguments.length<=1){
-                        results[i] = arguments[0];
-                    }else{
-                        results[i] = arguments;
-                    }
+        
+        return new YPromise(function(comp, err, prog){
+            var len = tasks.length;
+            var counter = 0;
+            var results = [];
+            
+            if(len === 0){
+                comp();
+                return;
+            }
+            
+            function process(index){
+                tasks[index]().then(function(){
+                    results[index] = arguments.length <= 1 ? arguments[0] : argsToArray(arguments);
                     counter++;
                     prog(counter);
-                    if(counter==len){
-                        comp.apply(this,results);
+                    if(counter === len){
+                        comp.apply(this, results);
                     }else{
                         process(counter);
                     }
-                },function(){
-                    results[i] = 'error in function ' + i;
+                }, function(){
+                    results[index] = 'error in function ' + index;
                     counter++;
-                    if(counter==len){
-                        comp.apply(this,results);
+                    if(counter === len){
+                        comp.apply(this, results);
                     }else{
                         process(counter);
                     }
                 });
             }
+            
+            process(0);
         });
     };
 
     YPromise.any = function(){
-        var args = arguments,
-            len = args.length,
-            doneFlag = false;
+        var args = argsToArray(arguments);
+        var len = args.length;
+        var doneFlag = false;
+        
         return new YPromise(function(comp){
-            for(var i=0;i<len;i++){
+            if(len === 0){
+                comp();
+                return;
+            }
+            
+            for(var i = 0; i < len; i++){
                 args[i].then(function(){
                     if(!doneFlag){
                         doneFlag = true;
-                        comp.apply(this,arguments);
+                        comp.apply(this, arguments);
                     }
-                })
+                });
             }
         });
     };
@@ -206,19 +226,28 @@
             comp(sync);
         });
     };
+    
     /**
-     *
-     * @param time {int}
+     * Sleep utility - creates a promise that resolves after specified time
+     * @param {number} time - Time in milliseconds
      * @returns {YPromise}
      */
     YPromise.sleep = function(time){
         return new YPromise(function(comp){
             setTimeout(function(){
                 comp();
-            },parseInt(time));
+            }, parseInt(time, 10));
         });
     };
 
-    //window.YPro = window.YPromise = YPromise;
-    module.exports = YPromise
+    // Export for Node.js and browser
+    if(typeof module !== 'undefined' && module.exports){
+        module.exports = YPromise;
+        // Convenience alias
+        module.exports.YPro = YPromise;
+    }
+    if(typeof window !== 'undefined'){
+        window.YPromise = YPromise;
+        window.YPro = YPromise;
+    }
 })();
